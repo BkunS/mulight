@@ -11,20 +11,23 @@ const getQuestions = () => {
   })
 }
 
-const getQuestionById = (id) => {
-  return axios.get(`${baseUrl}/questions/${id}`).then(res => {
+const getQuestionById = (url) => {
+  if (!url) return
+  return axios.get(`${baseUrl}${url}`).then(res => {
     return res.data
   })
 }
 
 const createQuestion = (data) => {
+  if (!data) return
   return axios.post(`${baseUrl}/questions`, data, { headers }).then(res => {
     return res.data
   })
 }
 
-const voteChoiceByQuestionId = (questionId, choiceId) => {
-  return axios.post(`${baseUrl}/questions/${questionId}/choices/${choiceId}`).then(res => {
+const voteChoiceByQuestionId = (url) => {
+  if (!url) return
+  return axios.post(`${baseUrl}${url}`).then(res => {
     return res.data
   })
 }

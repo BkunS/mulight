@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header><Header :title="title" /></el-header>
+      <el-header height="50px"><Header :title="title" /></el-header>
       <el-main><router-view /></el-main>
     </el-container>
   </div>
@@ -17,9 +17,28 @@ export default {
     Header,
     QuestionsList
   },
-  computed: {
-    title: function() {
-      return this.$route.name === 'QuestionsList' ? 'Questions' : 'Questions Detail'
+  data: () => ({
+    title: 'Questions'
+  }),
+  created() {
+    this.$store.dispatch('initStore')
+    this.updateTitle(this.$route.name)
+  },
+  watch: {
+    '$route' (to, from) {
+      this.updateTitle(to.name)
+    }
+  },
+  methods: {
+    updateTitle(pathName) {
+      switch(pathName) {
+        case 'QuestionsList':
+          return this.title = 'Questions'
+        case 'QuestionsDetail':
+          return this.title = 'Questions Detail'
+        case 'CreateQuestion':
+          return this.title = 'Create Question'
+      }
     }
   }
 }
@@ -32,6 +51,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 </style>

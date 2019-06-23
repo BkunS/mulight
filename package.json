@@ -5,24 +5,31 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
+    "@types/localforage": "0.0.34",
     "@types/vue-router": "^2.0.0",
     "axios": "^0.19.0",
     "core-js": "^2.6.5",
     "element-ui": "^2.9.2",
+    "localforage": "^1.7.3",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6",
     "vuex": "^3.1.1"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-plugin-unit-mocha": "^3.8.0",
     "@vue/cli-service": "^3.8.0",
+    "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
     "babel-plugin-component": "^1.1.1",
+    "chai": "^4.1.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "vue-cli-plugin-element": "^1.0.1",
