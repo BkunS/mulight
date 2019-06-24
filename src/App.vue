@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import localforage from 'localforage'
 import Header from './components/Header.vue'
 
 export default {
@@ -37,6 +38,9 @@ export default {
           return this.title = 'Create Question'
       }
     }
+  },
+  destroyed() {
+    localforage.clear()
   }
 }
 </script>

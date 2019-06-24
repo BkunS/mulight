@@ -1,10 +1,10 @@
 <template>
-  <div v-if="question" class="root">
-    <div class="question">
+  <div class="root">
+    <div v-if="question" class="question">
       Question: {{question.question}}
     </div>
     <el-table
-      v-if="question && question.choices"
+      v-if="question"
       :data="question.choices"
       style="width: 100%"
       v-loading="loadingTable"
@@ -46,19 +46,29 @@ export default {
   data: () => ({
     loadingTable: false,
     loadingIndex: -1,
-    question: ''
+    question: {}
   }),
   created() {
-    localforage.getItem('selectQuestion').then(questionUrl => {
-      if (!questionUrl) {
-        this.$message.error('Question url not found.')
-        return this.$router.replace({ path: '/' })
-      }
-      return this.getQuestionData(questionUrl)
+    let questionUrl = this.$store.state.selectQuestion
+    let promise
+    if (questionUrl) {
+       promise = this.getQuestionData(questionUrl)
+    } else {
+      promise = localforage.getItem('selectQuestion').then(questionUrl => {
+        return this.getQuestionData(questionUrl)
+      })
+    }
+
+    return promise.catch(err => {
+      this.$message.error(err.toString())
+      this.$router.replace({ path: '/' })
     })
   },
   methods: {
     getQuestionData(questionUrl) {
+      if (!questionUrl) throw new Error('Question url not found.')
+
+      this.loadingTable = true
       return getQuestionById(questionUrl).then(ret => {
         if (!ret || !ret.question || !Array.isArray(ret.choices)) return
 
@@ -71,8 +81,8 @@ export default {
           return choice
         })
         this.question = ret
-      }).catch(err => {
-        this.$message.error(err.toString())
+      }).finally(() => {
+        this.loadingTable = false
       })
     },
     handleVoteClick(scope) {

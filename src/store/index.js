@@ -28,10 +28,11 @@ export default new Vuex.Store({
       commit('updateQuestions', value)
     },
     updateSelectQuestion({ commit }, value) {
-      return localforage.setItem('selectQuestion', value).then(() => {
-        commit('updateSelectQuestion', value)
+      commit('updateSelectQuestion', value)
+      return localforage.ready().then(() => {
+        return localforage.setItem('selectQuestion', value)
       }).catch(() => {
-        commit('updateSelectQuestion', value)
+
       })
     }
   },
