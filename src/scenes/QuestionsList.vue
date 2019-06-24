@@ -30,7 +30,7 @@ export default {
     getQuestionsData() {
       this.isLoading = true
       return getQuestions().then(data => {
-        data = data.map((item, index) => {
+        data = data.map(item => {
           item.published_atStr = item.published_at ? new Date(item.published_at).toLocaleString('en-US') : 'N/A'
           item.choicesLen = Array.isArray(item.choices) ? item.choices.length : 0
           return item
@@ -43,7 +43,7 @@ export default {
       })
     },
     handleItemClick(question) {
-      this.$store.dispatch('updateSelectQuestion', question).then(() => {
+      return this.$store.dispatch('updateSelectQuestion', question).then(() => {
         this.$router.push({ path: 'detail' })
       })
     }

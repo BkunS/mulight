@@ -9,13 +9,11 @@
 
 <script>
 import Header from './components/Header.vue'
-import QuestionsList from './scenes/QuestionsList.vue'
 
 export default {
   name: 'app',
   components: {
-    Header,
-    QuestionsList
+    Header
   },
   data: () => ({
     title: 'Questions'
@@ -25,7 +23,7 @@ export default {
     this.updateTitle(this.$route.name)
   },
   watch: {
-    '$route' (to, from) {
+    '$route' (to) {
       this.updateTitle(to.name)
     }
   },

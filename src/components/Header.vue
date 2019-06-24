@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     showCreateBT: function() {
-      return this.$route.name === 'QuestionsList'
+      return this.$route && this.$route.name === 'QuestionsList'
     }
   },
   methods: {

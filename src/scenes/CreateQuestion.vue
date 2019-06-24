@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <el-form :model="questionForm" ref="questionForm" label-width="90px" class="questionForm">
+    <el-form :model="questionForm" ref="questionForm" label-width="120px" class="questionForm">
       <el-form-item
         prop="question"
         label="Question"
@@ -63,7 +63,7 @@ export default {
           }
 
           this.isLoading = true
-          return createQuestion(data).then(ret => {
+          return createQuestion(data).then(() => {
             this.$message.success('Submitted!')
             this.$router.go(-1)
           }).catch(err => {
@@ -103,11 +103,7 @@ export default {
 .questionForm {
   width: 100%;
   min-width: 350px;
-  max-width: 800px;
-}
-
-.formItem {
-
+  max-width: 960px;
 }
 
 .choiceInput {
