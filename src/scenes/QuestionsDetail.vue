@@ -7,6 +7,7 @@
       v-if="question && question.choices"
       :data="question.choices"
       style="width: 100%"
+      v-loading="loadingTable"
       :show-header="true">
       <el-table-column
         fixed
@@ -37,31 +38,43 @@
 </template>
 
 <script>
-import { voteChoiceByQuestionId } from '../apis'
+import localforage from 'localforage'
+import { getQuestionById, voteChoiceByQuestionId } from '../apis'
+
 export default {
   name: 'QuestionsDetail',
   data: () => ({
-    loadingIndex: -1
+    loadingTable: false,
+    loadingIndex: -1,
+    question: ''
   }),
-  computed: {
-    question: function() {
-      const question = this.$store.state.selectQuestion
-      if (!question || !question.question || !Array.isArray(question.choices)) {
+  created() {
+    localforage.getItem('selectQuestion').then(questionUrl => {
+      if (!questionUrl) {
+        this.$message.error('Question url not found.')
         return this.$router.replace({ path: '/' })
       }
-
-      let total = question.choices.reduce((sum, item) => {
-        return sum + item.votes
-      }, 0)
-      total = total === 0 ? 1 : total
-      question.choices = question.choices.map(choice => {
-        choice.percent = `${(choice.votes / total * 100).toFixed(0)}%`
-        return choice
-      })
-      return question
-    }
+      return this.getQuestionData(questionUrl)
+    })
   },
   methods: {
+    getQuestionData(questionUrl) {
+      return getQuestionById(questionUrl).then(ret => {
+        if (!ret || !ret.question || !Array.isArray(ret.choices)) return
+
+        let total = ret.choices.reduce((sum, item) => {
+          return sum + item.votes
+        }, 0)
+        total = total === 0 ? 1 : total
+        ret.choices = ret.choices.map(choice => {
+          choice.percent = `${(choice.votes / total * 100).toFixed(0)}%`
+          return choice
+        })
+        this.question = ret
+      }).catch(err => {
+        this.$message.error(err.toString())
+      })
+    },
     handleVoteClick(scope) {
       const { $index, row } = scope
       const { choices } = this.question

@@ -19,7 +19,6 @@ export default {
     title: 'Questions'
   }),
   created() {
-    this.$store.dispatch('initStore')
     this.updateTitle(this.$route.name)
   },
   watch: {

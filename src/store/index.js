@@ -13,7 +13,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     questions: [],
-    selectQuestion: {}
+    selectQuestion: ''
   },
   getters: {
     questions(state) {
@@ -24,14 +24,6 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    initStore({ commit }) {
-      const promises = [localforage.getItem('selectQuestion')]
-      return Promise.all(promises).then(res => {
-        commit('updateSelectQuestion', res[0] ? res[0] : {})
-      }).catch(() => {
-        commit('updateSelectQuestion', {})
-      })
-    },
     updateQuestions({ commit }, value) {
       commit('updateQuestions', value)
     },

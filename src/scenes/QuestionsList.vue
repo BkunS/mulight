@@ -19,7 +19,12 @@ export default {
     isLoading: false
   }),
   created() {
-    this.getQuestionsData()
+    const { questions } = this.$store.state
+    if (!Array.isArray(questions) || questions.length === 0) {
+      this.getQuestionsData().then(() => {
+        this.$message.success('Questions List Updated!')
+      })
+    }
   },
   computed: {
     questions: function() {
@@ -35,7 +40,7 @@ export default {
           item.choicesLen = Array.isArray(item.choices) ? item.choices.length : 0
           return item
         })
-        this.$store.dispatch('updateQuestions', data)
+        return this.$store.dispatch('updateQuestions', data)
       }).catch((err) => {
         this.$message.error(err.toString())
       }).finally(() => {
@@ -43,7 +48,8 @@ export default {
       })
     },
     handleItemClick(question) {
-      return this.$store.dispatch('updateSelectQuestion', question).then(() => {
+      if (!question.url) return
+      return this.$store.dispatch('updateSelectQuestion', question.url).then(() => {
         this.$router.push({ path: 'detail' })
       })
     }
